@@ -4,19 +4,20 @@ import seaborn as sns
 from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
 
-# Import data (Make sure to parse dates. Consider setting index column to 'date'.)
-df = None
+# Import data, parse dates and set date column as index
+df = pd.read_csv('fcc-forum-pageviews.csv', parse_dates=['date'], index_col='date')
 
-# Clean data
-df = None
+# Clean data, removing top and bottom 2.5% of values
+df = df[(df['value'] >= df['value'].quantile(0.025)) & (df['value'] <= df['value'].quantile(0.975))]
 
 
 def draw_line_plot():
-    # Draw line plot
-
-
-
-
+    # Draw line plot with red line
+    fig, ax = plt.subplots(figsize=(24, 8))
+    ax.plot(df.index, df['value'], 'r')
+    
+    # Set axis labels and title of plot
+    ax.set(xlabel='Date', ylabel='Page Views', title='Daily freeCodeCamp Forum Page Views 5/2016-12/2019')
 
     # Save image and return fig (don't change this part)
     fig.savefig('line_plot.png')
