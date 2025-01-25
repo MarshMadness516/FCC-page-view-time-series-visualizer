@@ -25,15 +25,26 @@ def draw_line_plot():
 
 def draw_bar_plot():
     # Copy and modify data for monthly bar plot
-    df_bar = None
+    df_bar = df.copy(deep=True)
+    df_bar['year'] = df_bar.index.year
+    df_bar['month'] = df_bar.index.month
+
+    df_bar = df_bar.groupby(by=['year', 'month'], as_index=False).mean()
 
     # Draw bar plot
+    fig, ax = plt.subplots(figsize=(9, 6.75))
+    ax = df_bar.pivot(index='year', columns='month', values='value').plot.bar(ax=ax)
+    # Change axis labels
+    plt.xlabel('Years')
+    plt.ylabel('Average Page Views')
+    # Change legend labels to month names
+    handles, labels = plt.gca().get_legend_handles_labels()
+    for i, l in enumerate(labels):
+        labels[i] = pd.to_datetime(l, format='%m').month_name()
+    plt.legend(handles, labels, title='Months')
 
-
-
-
-
-    # Save image and return fig (don't change this part)
+    # Save image and return fig
+    fig = ax.get_figure()
     fig.savefig('bar_plot.png')
     return fig
 
