@@ -1,4 +1,4 @@
-image: gitpod/workspace-python-3.8
+image: gitpod/workspace-python-3.13
 
 tasks:
   - init: pip install -r requirements.txt
