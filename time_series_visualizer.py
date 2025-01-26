@@ -49,18 +49,37 @@ def draw_bar_plot():
     return fig
 
 def draw_box_plot():
-    # Prepare data for box plots (this part is done!)
+    # Prepare data for box plots
     df_box = df.copy()
     df_box.reset_index(inplace=True)
     df_box['year'] = [d.year for d in df_box.date]
     df_box['month'] = [d.strftime('%b') for d in df_box.date]
 
-    # Draw box plots (using Seaborn)
+    # Draw box plots with Seaborn
+    fig, axs = plt.subplots(1,2, figsize=(20,6))
+    # Draw year-wise plot on the first element in matplotlib axes array, changing color palette and flier style and size
+    ax1 = sns.boxplot(data=df_box, x='year', y='value', hue='year', legend=False, palette='Set1', flierprops={'marker':'d', 'markersize': 2}, ax=axs[0])
+    # Draw month-wise plot on the second element in matplotlib axes array, changing color palette and flier style and size, and ordering the data chronologically
+    ax2 = sns.boxplot(
+        data=df_box,
+        x='month',
+        y='value',
+        hue='month',
+        order=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        legend=False,
+        palette='husl',
+        flierprops={'marker':'d', 'markersize':2},
+        ax=axs[1]
+        )
+    # Set titles and axis labels for both plots
+    ax1.set_title('Year-wise Box Plot (Trend)')
+    ax1.set_xlabel('Year')
+    ax1.set_ylabel('Page Views')
+    ax2.set_title('Month-wise Box Plot (Seasonality)')
+    ax2.set_xlabel('Month')
+    ax2.set_ylabel('Page Views')
 
 
-
-
-
-    # Save image and return fig (don't change this part)
+    # Save image and return fig
     fig.savefig('box_plot.png')
     return fig
